@@ -302,6 +302,12 @@ body {
     border-radius: 100%;
 }
 
+.chat-header-icons {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+}
+
 .chat_screen {
     transform: translateX(2000px);
     position: absolute;
@@ -484,6 +490,11 @@ body {
     background-color: var(--light-grey);
 }
 
+.video {
+    -webkit-mask: url(../assets/icons/video.svg) no-repeat center / contain;
+    mask: url(../assets/icons/video.svg) no-repeat center / contain;
+}
+
 .emoji {
     -webkit-mask: url(../assets/icons/emoticon.svg) no-repeat center / contain;
     mask: url(../assets/icons/emoticon.svg) no-repeat center / contain;
@@ -498,6 +509,53 @@ body {
 .mic {
     -webkit-mask: url(../assets/icons/microphone.svg) no-repeat center / contain;
     mask: url(../assets/icons/microphone.svg) no-repeat center / contain;
+}
+
+.chat_video {
+    position: absolute;
+    height: 86vh;
+    width: 100%;
+    z-index: 200;
+    top: 8vh;
+    left: 0;
+    display: none;
+}
+
+.chat_video.active {
+    display: flex;
+    flex-direction: column;
+}
+
+.video__container {
+    flex: 1;
+    background: black;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+}
+
+.chat_video_footer {
+    height: 10vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-bottom: 15px solid var(--light-grey);
+}
+
+.icon--hangup__container {
+    border: 1px solid black;
+    background: red;
+    border-radius: 100%;
+    padding: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.icon--hangup {
+    -webkit-mask: url(../assets/icons/phone-hangup.svg) no-repeat center / contain;
+    mask: url(../assets/icons/phone-hangup.svg) no-repeat center / contain;
+    background-color: var(--lighter-grey);
 }
 
 footer {

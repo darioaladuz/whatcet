@@ -111,3 +111,42 @@ window.addEventListener('resize', (e) => {
         sidebar.classList.remove('off');
     }
 })
+
+// logic for video calls
+
+const videoBtn = document.querySelector('.video');
+const videoCall = document.querySelector('.chat_video');
+const cam = document.querySelector('video');
+const hangupBtn = document.querySelector('.icon--hangup__container');
+
+// declare stream variable (to get webcam) & add value with async function
+// once we call it when videocall starts
+let stream = null;
+
+async function setStream() {
+    stream = await navigator.mediaDevices.getUserMedia({ video: true });
+}
+
+// videocall starts, get webcam & display it on screen
+
+async function videoCallSetup() {
+    await setStream();
+    cam.srcObject = stream;
+}
+
+async function stopVideoCall() {
+    stream.getTracks().forEach(track => {
+        track.stop();
+    })
+    videoCall.classList.remove('active');
+}
+
+videoBtn.addEventListener('click', () => {
+    videoCall.classList.add('active');
+    videoCallSetup();
+})
+
+hangupBtn.addEventListener('click', () => {
+    stopVideoCall();
+    console.log('shpould work')
+})
