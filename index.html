@@ -9,6 +9,23 @@
     <script src="https://kit.fontawesome.com/a85295bb64.js" crossorigin="anonymous"></script>
 </head>
 <body>
+    <section id="authentication__screen">
+        <span id="authentication__title">WhatCet</span>
+        <button class="authentication__btn btn--log">Log In</button>
+        <span id="authentication__separate">or</span>
+        <button class="authentication__btn btn--register">Register</button>
+
+        <section id="login">
+            <span class="form__title">Log In</span>
+            <form id="form__log" action="/">
+                <label for="username">Username</label>
+                <input name="username" required minlength="3" maxlength="16" type="text">
+                <label for="password">Password</label>
+                <input name="password" required minlength="8" maxlength="16" type="password">
+                <input type="submit" name="log_submit" value="^" class="form__submit">
+            </form>
+        </section>
+    </section>
     <!-- <input style="display: none;" id="file" type="file"> -->
     <aside id="sidebar">
         <header>

@@ -36,9 +36,127 @@ body {
     position: relative;
 }
 
+#authentication__screen {
+    height: 92vh;
+    background: var(--darkish-grey);
+    width: 100vw;
+    position: absolute;
+    left: 0;
+    top: 0;
+    z-index: 100000000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    gap: 20px;
+}
+
+#authentication__screen.inactive {
+    display: none;
+}
+
+#authentication__title {
+    font-weight: bold;
+    font-size: 32px;
+    position: absolute;
+    top: 16px;
+    left: 16px;
+    color: var(--light-grey);
+}
+
+#authentication__separate {
+    color: var(--light-grey);
+}
+
+.authentication__btn {
+    width: 100px;
+    padding: 10px 15px;
+    font-weight: bold;
+    border: none;
+    border-radius: 16px;
+    cursor: pointer;
+    transition: .6s ease;
+}
+
+.btn--log {
+    background: var(--user-message);
+    color: var(--light-grey);
+}
+
+.btn--register {
+    background: var(--light-grey);
+    color: var(--user-message);
+}
+
+.btn--log:hover {
+    background: var(--light-grey);
+    color: var(--user-message);
+}
+
+.btn--register:hover {
+    background: var(--user-message);
+    color: var(--light-grey);
+}
+
+#login {
+    position: absolute;
+    max-width: 80%;
+    min-width: 350px;
+    height: 400px;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    background: var(--light-grey);
+    border-radius: 16px;
+    box-shadow: 0 0 16px 4px rgba(0,0,0,.15);
+}
+
+#login.active {
+    display: flex;
+}
+
+#login form {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+#login form input {
+    padding: 10px 15px;
+    border: none;
+}
+
+.form__submit {
+    cursor: pointer;
+    transition: .6s;
+}
+
+.form__submit:hover {
+    background: var(--light-grey);
+    transform: translateY(4px);
+    font-weight: bold;
+    color: #fff;
+}
+
+.form__title {
+    position: absolute;
+    top: 16px; 
+    left: 16px;
+    font-weight: bold;
+    font-size: 24px;
+    color: var(--dark-grey);
+    transition: .6s;
+    cursor: default;
+}
+
+.form__title:hover {
+    transform: translateY(-4px);
+}
+
 #sidebar {
     width: 100%;
-    min-height: 92vh;
+    height: 92vh;
     display: block;
     /* display: none; */
     flex-direction: column;

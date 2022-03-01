@@ -150,3 +150,22 @@ hangupBtn.addEventListener('click', () => {
     stopVideoCall();
     console.log('shpould work')
 })
+
+// auth screen
+
+const logBtn = document.querySelector('.btn--log');
+const login = document.getElementById('login');
+logBtn.addEventListener('click', () => {
+    login.classList.add('active');
+})
+
+// frontend login form (just for now until db is added)
+
+const authScreen = document.getElementById('authentication__screen');
+const logForm = document.getElementById('form__log');
+
+logForm.addEventListener('submit', (e) => {
+    e.preventDefault();
+
+    authScreen.classList.add('inactive');
+})
