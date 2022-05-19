@@ -1,3 +1,14 @@
+<?php 
+    session_start();
+    include("./db.php");
+    $username;
+    $status;
+    if($_SESSION["user"]){
+        $username = $_SESSION["user"]["fullname"];
+        $status = $_SESSION["user"]["status"];
+        // echo $_SESSION['user']['profileimg_path'];
+    }
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -9,31 +20,63 @@
     <script src="https://kit.fontawesome.com/a85295bb64.js" crossorigin="anonymous"></script>
 </head>
 <body>
-    <section id="authentication__screen">
+    <?php echo "<script>console.log('$username')</script>"; ?> 
+    <section id="authentication__screen" class="<?php if($_SESSION["user"]) echo "inactive"; ?>">
         <span id="authentication__title">WhatCet</span>
         <button class="authentication__btn btn--log">Log In</button>
         <span id="authentication__separate">or</span>
         <button class="authentication__btn btn--register">Register</button>
 
-        <section id="login">
+        <section id="login" class="authentication__form <?php if(isset($_GET["wrongcredentials"])) echo "active" ?>">
             <span class="form__title">Log In</span>
-            <form id="form__log" action="/">
+            <form id="form__log" action="./login.php" method="POST">
                 <label for="username">Username</label>
-                <input name="username" required minlength="3" maxlength="16" type="text">
+                <input name="username" required minlength="3" maxlength="16" type="text" placeholder="elonmusk777">
                 <label for="password">Password</label>
-                <input name="password" required minlength="8" maxlength="16" type="password">
+                <input name="password" required minlength="8" maxlength="16" type="password" placeholder="********">
+                <input type="hidden" name="type" id="type" value="login" />
                 <input type="submit" name="log_submit" value="^" class="form__submit">
             </form>
         </section>
+
+        <section id="register" class="authentication__form <?php if(isset($_GET["fullname"])) echo "active"; ?>">
+            <span class="form__title">Register</span>
+            <form id="form__register" action="./register.php" method="POST">
+                <?php if(isset($_GET["alreadyexists"])) echo "<span class=\"error\">Username or email already exists"; ?></span>
+                <label for="fullname">Full Name (this is how other users will see you)</label>
+                <input name="fullname" required minlength="3" maxlength="48" type="text" value="<?php if(isset($_GET["fullname"])) echo $_GET["fullname"] ?>">
+                <label for="username">Username (this is how you will log in)</label>
+                <input name="username" required minlength="3" maxlength="16" type="text" value="<?php if(isset($_GET["username"])) echo $_GET["username"] ?>">
+                <label for="email">Email</label>
+                <input name="email" required minlength="8" maxlength="16" type="email" value="<?php if(isset($_GET["email"])) echo $_GET["email"] ?>">
+                <label for="password">Password</label>
+                <input name="password" required minlength="8" maxlength="16" type="password">
+                <label for="password2">Repeat password</label>
+                <input name="password2" required minlength="8" maxlength="16" type="password">
+                <input type="hidden" name="type" id="type" value="register" />
+                <input type="submit" name="register_submit" value="^" class="form__submit">
+            </form>
+
+        </section>
     </section>
     <!-- <input style="display: none;" id="file" type="file"> -->
+
+    <form class="form-profile-img" action="./upload.php" method="POST" enctype="multipart/form-data">
+        <input type="file" name="file" />
+        <button name="submit" type="submit">Upload</button>
+    </form>
+
     <aside id="sidebar">
         <header>
             <div class="user">
                 <div class="user-header">
                     <div class="arrow-back-icon profile-arrow"></div>
-                    <img class="user-img" src="./images/cesar-rincon-XHVpWcr5grQ-unsplash.jpg" alt="">
+                    <img class="user-img" src=".<?php echo $_SESSION['user']['profileimg_path']; ?>" alt="">
+                    <button class="btn btn-modal-profileimg">change<div class="pencil-icon profile-icon"></div></button>
+
+                    
                 </div>
+               
                 <div class="user-profile">
                     <div class="user-profile-back">
                         <h2 class="user-profile-title">Profile</h2>
@@ -48,13 +91,11 @@
                             Your name
                         </span>
 
-                        <div class="user-profile-name-display">
-                            <span class="user-name">
-                                Dario
-                            </span>
+                        <form class="user-profile-name-display" action="./update.php" method="POST">
+                            <input id="fullname" name="fullname" class="profile-input user-name" value="<?php echo $username; ?>" placeholder="Full name" required minlength="3" maxlength="25">
 
-                            <span class="btn btn-change-name">[]</span>
-                        </div>
+                            <button class="btn btn-change-name">change</button>
+                        </form>
                     </div>
 
                     <div class="user-profile-disclaimer">
@@ -63,19 +104,15 @@
                         </span>
                     </div>
 
-                    <div class="user-profile-about">
-                        <span class="user-profile-about-title">
-                            About
-                        </span>
+                    <form class="user-profile-status" action="./update.php" method="POST">
+                        <span class="user-profile-status-title">Status</span>
+
+                        <div class="user-profile-status-display">
+                            <input id="status" name="status" class="profile-input user-status" value="<?php echo $status ?>" placeholder="What's on your mind?" required>
                     
-                        <div class="user-profile-about-display">
-                            <span class="user-about">
-                                Hey there! I am using WhatCet.
-                            </span>
-                    
-                            <span class="btn btn-change-about">[]</span>
+                            <button class="btn btn-change-status">change</button>
                         </div>
-                    </div>
+                    </form>
                 </div>
             </div>
 
@@ -93,7 +130,7 @@
                         <li>New group</li>
                         <li>Starred messages</li>
                         <li>Settings</li>
-                        <li>Log out</li>
+                        <li><button><a href="logout.php">Log out</a></button></li>
                     </ul>
                 </div>
             </nav>

@@ -1,3 +1,19 @@
+// open profile img modal
+
+const profileImgModal = document.querySelector('.form-profile-img');
+const btnProfileImgModal = document.querySelector('.btn-modal-profileimg');
+
+btnProfileImgModal.addEventListener('click', () => {
+    console.log('hello');
+    if(profileImgModal.style.display === "block"){
+        profileImgModal.style.display = "none";
+        btnProfileImgModal.textContent = "change";
+    } else {
+        profileImgModal.style.display = "block";
+        btnProfileImgModal.textContent = "close";
+    }
+})
+
 // logic for opening and closing profile
 
 const profileBtn = document.querySelector('.user-img');
@@ -159,13 +175,60 @@ logBtn.addEventListener('click', () => {
     login.classList.add('active');
 })
 
+const registerBtn = document.querySelector('.btn--register');
+const register = document.getElementById('register');
+registerBtn.addEventListener('click', () => {
+    register.classList.add('active');
+})
+
+// close log/register forms when pressing ESC key or outside the form
+
+window.addEventListener('keydown', e => {
+    if(e.keyCode === 27) {
+        login.classList.remove('active');
+        register.classList.remove('active');
+    }
+})
+
+html.addEventListener('click', () => {
+    login.classList.remove('active');
+    register.classList.remove('active');
+})
+
+// prevent html click event from happening when clicking inside the form
+
+logBtn.addEventListener('click', e => {
+    e.stopPropagation();
+})
+
+registerBtn.addEventListener('click', e => {
+    e.stopPropagation();
+})
+
+login.addEventListener('click', e => {
+    e.stopPropagation();
+})
+
+register.addEventListener('click', e => {
+    e.stopPropagation();
+})
+
 // frontend login form (just for now until db is added)
 
-const authScreen = document.getElementById('authentication__screen');
-const logForm = document.getElementById('form__log');
+// const authScreen = document.getElementById('authentication__screen');
+// const logForm = document.getElementById('form__log');
 
-logForm.addEventListener('submit', (e) => {
-    e.preventDefault();
+// logForm.addEventListener('submit', (e) => {
+//     e.preventDefault();
 
-    authScreen.classList.add('inactive');
-})
+//     authScreen.classList.add('inactive');
+// })
+
+// change name (display input)
+
+// const nameInput = document.querySelector('');
+// const changeNameBtn = document.querySelector('btn-change-name');
+
+// changeNameBtn.addEventListener
+
+// change status (display input)
