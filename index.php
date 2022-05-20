@@ -3,10 +3,24 @@
     include("./db.php");
     $username;
     $status;
+    $profileimg_path;
     if($_SESSION["user"]){
         $username = $_SESSION["user"]["fullname"];
         $status = $_SESSION["user"]["status"];
         // echo $_SESSION['user']['profileimg_path'];
+    }
+    $profileimg_id = $_SESSION['user']['profileimg_id'];
+
+    $sql = "SELECT * FROM `profile_images` WHERE `id`='$profileimg_id'";
+    $result = $conn->query($sql);
+    if ($result->num_rows > 0) {
+        // output data of each row
+        while($row = $result->fetch_assoc()) {
+            $path = $row["path"];
+            $profileimg_path = "/profile_images/$path";
+        }
+    } else {
+        echo "<script>console.log('user has no profile img')</script>";
     }
 ?>
 <!DOCTYPE html>
@@ -71,10 +85,8 @@
             <div class="user">
                 <div class="user-header">
                     <div class="arrow-back-icon profile-arrow"></div>
-                    <img class="user-img" src=".<?php echo $_SESSION['user']['profileimg_path']; ?>" alt="">
-                    <button class="btn btn-modal-profileimg">change<div class="pencil-icon profile-icon"></div></button>
-
-                    
+                    <img class="user-img" src=".<?php echo $profileimg_path; ?>" alt="">
+                    <button class="btn btn-change btn-modal-profileimg"><div class="pencil-icon profile-icon"></div></button>
                 </div>
                
                 <div class="user-profile">
@@ -87,30 +99,30 @@
                     </div> -->
 
                     <div class="user-profile-name">
-                        <span class="user-profile-name-title">
+                        <p class="user-profile-name-title">
                             Your name
-                        </span>
+                        </p>
 
                         <form class="user-profile-name-display" action="./update.php" method="POST">
                             <input id="fullname" name="fullname" class="profile-input user-name" value="<?php echo $username; ?>" placeholder="Full name" required minlength="3" maxlength="25">
 
-                            <button class="btn btn-change-name">change</button>
+                            <button class="btn btn-change btn-change-name"><div class="pencil-icon profile-icon"></div></button>
                         </form>
                     </div>
 
                     <div class="user-profile-disclaimer">
-                        <span class="user-profile-disclaimer-text">
+                        <p class="user-profile-disclaimer-text">
                             This is not your username or pin. This name will be visible to your WhatCet contacts.
-                        </span>
+                        </p>
                     </div>
 
                     <form class="user-profile-status" action="./update.php" method="POST">
-                        <span class="user-profile-status-title">Status</span>
+                        <p class="user-profile-status-title">Status</p>
 
                         <div class="user-profile-status-display">
                             <input id="status" name="status" class="profile-input user-status" value="<?php echo $status ?>" placeholder="What's on your mind?" required>
                     
-                            <button class="btn btn-change-status">change</button>
+                            <button class="btn btn-change btn-change-status"><div class="pencil-icon profile-icon"></div></button>
                         </div>
                     </form>
                 </div>

@@ -6,7 +6,7 @@
         $username = $_POST["username"];
         $email = $_POST["email"];
         $hash = convert_uuencode($_POST["password"]);
-        $id = random_int(1, 1000000);
+        // $id = random_int(1, 1000000);
 
         $findUsername = "SELECT * FROM users WHERE username='$username'";
         $usernameExists = ($conn->query($findUsername))->num_rows > 0;
@@ -37,8 +37,8 @@
         // }
         
         if($_POST["password"] === $_POST["password2"]){
-            $sql = "INSERT INTO users (fullname, username, email, hash, status, id) 
-                    VALUES ('$fullname', '$username', '$email', '$hash', 'Hey there! I am using WhatCet.', $id)";
+            $sql = "INSERT INTO users (fullname, username, email, hash, status, profileimg_id) 
+                    VALUES ('$fullname', '$username', '$email', '$hash', 'Hey there! I am using WhatCet.'), 0";
 
             if($conn->query($sql)){
                 echo "<script>console.log('New record created successfully')</script>";
