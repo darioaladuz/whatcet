@@ -1,24 +1,16 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-</head>
-<body>
-    <h1>Tests</h1>
+<?php 
+    // ini_set('display_errors', 1);
+    // ini_set('display_startup_errors', 1);
+    // error_reporting(E_ALL);
+    // session_start();
+    // include("db.php");
 
-    <h2>Relationships</h2>
-
-    <?php 
-        session_start();
-        include("db.php");
-
+    if($_SESSION["user"]){
         $userID = $_SESSION["user"]["id"];
+        $users = [];
 
-        echo $_SESSION["user"]["username"];
-        echo $userID;
+        // echo $_SESSION["user"]["username"];
+        // echo $userID;
 
         $sql = "SELECT * FROM `relationships` WHERE `user1_id` = $userID";
         $result = $conn->query($sql);
@@ -35,16 +27,18 @@
             if ($result2->num_rows > 0) {
             // output data of each row
             while($row2 = $result2->fetch_assoc()) {
-                echo "<div><p>" . $row2["fullname"] . "</p></div>";
+                if(count($users) === 0){
+                    $users[0] = $row2;
+                } else {
+                    array_push($users, $row2);
+                }
             }
             } else {
-            echo "0 results";
+                echo "<script>console.log('searching contacts: 0 results')</script>";
             }
         }
         } else {
-        echo "0 results";
+            echo "<script>console.log('searching contacts: 0 results')</script>";
         }
-        $conn->close();
-    ?>
-</body>
-</html>
+    }
+?>

@@ -1,6 +1,11 @@
 <?php 
+    ini_set('display_errors', 1);
+    ini_set('display_startup_errors', 1);
+    error_reporting(E_ALL);
+
     session_start();
     include("./db.php");
+    include("./profile_img.php");
     $username;
     $status;
     $profileimg_path;
@@ -11,17 +16,18 @@
     }
     $profileimg_id = $_SESSION['user']['profileimg_id'];
 
-    $sql = "SELECT * FROM `profile_images` WHERE `id`='$profileimg_id'";
-    $result = $conn->query($sql);
-    if ($result->num_rows > 0) {
-        // output data of each row
-        while($row = $result->fetch_assoc()) {
-            $path = $row["path"];
-            $profileimg_path = "/profile_images/$path";
-        }
-    } else {
-        echo "<script>console.log('user has no profile img')</script>";
-    }
+    $profileimg_path = getProfileImgPath($conn, $profileimg_id);
+    // $sql = "SELECT * FROM `profile_images` WHERE `id`='$profileimg_id'";
+    // $result = $conn->query($sql);
+    // if ($result->num_rows > 0) {
+    //     // output data of each row
+    //     while($row = $result->fetch_assoc()) {
+    //         $path = $row["path"];
+    //         $profileimg_path = "/profile_images/$path";
+    //     }
+    // } else {
+    //     echo "<script>console.log('user has no profile img')</script>";
+    // }
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -34,14 +40,13 @@
     <script src="https://kit.fontawesome.com/a85295bb64.js" crossorigin="anonymous"></script>
 </head>
 <body>
-    <?php echo "<script>console.log('$username')</script>"; ?> 
-    <section id="authentication__screen" class="<?php if($_SESSION["user"]) echo "inactive"; ?>">
+    <section id="authentication__screen" class="<?php if(isset($_SESSION['user'])) echo 'inactive'; ?>">
         <span id="authentication__title">WhatCet</span>
         <button class="authentication__btn btn--log">Log In</button>
         <span id="authentication__separate">or</span>
         <button class="authentication__btn btn--register">Register</button>
 
-        <section id="login" class="authentication__form <?php if(isset($_GET["wrongcredentials"])) echo "active" ?>">
+        <section id="login" class="authentication__form <?php if(isset($_GET["wrongcredentials"])) echo "active"; ?>">
             <span class="form__title">Log In</span>
             <form id="form__log" action="./login.php" method="POST">
                 <label for="username">Username</label>
@@ -155,6 +160,40 @@
 
         <section id="chats">
             <ul>
+                <?php
+                    include("contacts.php");
+
+                    foreach($users as $contact) {
+                        $contactName = $contact["fullname"];
+                        $contactProfileImgId = $contact["profileimg_id"];
+                        $contactProfileImgPath = getProfileImgPath($conn, $contactProfileImgId);
+                        echo "
+                        <li class=\"chat chat1\">
+                            <div class=\"chat1-profile\">
+                                <img src=\"./$contactProfileImgPath\" alt=\"\" class=\"chat1-profile-img\">
+                            </div>
+
+                            <div class=\"chat_right\">
+                                <div class=\"chat-details\">
+                                    <span class=\"chat-name\">
+                                        $contactName
+                                    </span>
+            
+                                    <span class=\"chat-time\">
+                                        14:59
+                                    </span>
+                                </div>
+            
+                                <div class=\"chat-last-msg\">
+                                    <div class=\"chat-check check\"></div>
+                                    <span class=\"chat-last-msger-text\">
+                                        Lorem ipsum blabla
+                                    </span>
+                                </div>
+                            </div>
+                        </li>";
+                    }
+                ?>
                 <li class="chat chat1">
                     <div class="chat1-profile">
                         <img src="./images/girl1.jpeg" alt="" class="chat1-profile-img">

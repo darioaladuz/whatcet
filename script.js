@@ -7,10 +7,10 @@ btnProfileImgModal.addEventListener('click', () => {
     console.log('hello');
     if(profileImgModal.style.display === "block"){
         profileImgModal.style.display = "none";
-        btnProfileImgModal.textContent = "change";
+        btnProfileImgModal.innerHTML = "<div class=\"pencil-icon profile-icon\"></div>";
     } else {
         profileImgModal.style.display = "block";
-        btnProfileImgModal.textContent = "close";
+        btnProfileImgModal.innerHTML = "close";
     }
 })
 
