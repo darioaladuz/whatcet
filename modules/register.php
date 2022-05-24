@@ -1,5 +1,5 @@
 <?php 
-    include("./db.php");
+    include("../db.php");
 
     if(isset($_POST["type"]) && $_POST["type"] === "register"){
         $fullname = $_POST["fullname"];
@@ -38,7 +38,7 @@
         
         if($_POST["password"] === $_POST["password2"]){
             $sql = "INSERT INTO users (fullname, username, email, hash, status, profileimg_id) 
-                    VALUES ('$fullname', '$username', '$email', '$hash', 'Hey there! I am using WhatCet.'), 0";
+                    VALUES ('$fullname', '$username', '$email', '$hash', 'Hey there! I am using WhatCet.', 0)";
 
             if($conn->query($sql)){
                 echo "<script>console.log('New record created successfully')</script>";
@@ -53,5 +53,5 @@
     } else {
         echo "404 Not Found";
     }
-    header("Location: index.php", TRUE, 301);
+    header("Location: ../index.php", TRUE, 301);
 ?>

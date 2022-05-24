@@ -91,25 +91,25 @@ chatMenuBtn.addEventListener('click', chatDropdownMenuOpen);
 
 // enter and exit chat logic
 const sidebar = document.getElementById('sidebar')
-const chat = document.querySelector('.chat1');
-const chatScreen = document.querySelector('.chat_screen');
-const arrowBack = document.querySelector('.arrow-back-icon.chat-icon');
-const welcome = document.querySelector('.welcome-page');
+// const chat = document.querySelector('.chat1');
+// const chatScreen = document.querySelector('.chat_screen');
+// const arrowBack = document.querySelector('.arrow-back-icon.chat-icon');
+// const welcome = document.querySelector('.welcome-page');
 
-const toggleChat = () => {
-    if(document.documentElement.clientWidth < 1024) {
-        sidebar.classList.toggle('off');
-        chatScreen.classList.toggle('on');
-    } else {
-        chatScreen.classList.add('on');
-        welcome.classList.add('off');
-        sidebar.classList.remove('off');
-    } 
-}
-// enter chat
-chat.addEventListener('click', toggleChat)
-// go back
-arrowBack.addEventListener('click', toggleChat)
+// const toggleChat = () => {
+//     if(document.documentElement.clientWidth < 1024) {
+//         sidebar.classList.toggle('off');
+//         chatScreen.classList.toggle('on');
+//     } else {
+//         chatScreen.classList.add('on');
+//         welcome.classList.add('off');
+//         sidebar.classList.remove('off');
+//     } 
+// }
+// // enter chat
+// chat.addEventListener('click', toggleChat)
+// // go back
+// arrowBack.addEventListener('click', toggleChat)
 
 // start scrolling from the bottom on chat
 

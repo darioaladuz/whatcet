@@ -2,10 +2,9 @@
     ini_set('display_errors', 1);
     ini_set('display_startup_errors', 1);
     error_reporting(E_ALL);
-
     session_start();
     include("./db.php");
-    include("./profile_img.php");
+    include("./modules/profile_img.php");
     $username;
     $status;
     $profileimg_path;
@@ -17,17 +16,6 @@
     $profileimg_id = $_SESSION['user']['profileimg_id'];
 
     $profileimg_path = getProfileImgPath($conn, $profileimg_id);
-    // $sql = "SELECT * FROM `profile_images` WHERE `id`='$profileimg_id'";
-    // $result = $conn->query($sql);
-    // if ($result->num_rows > 0) {
-    //     // output data of each row
-    //     while($row = $result->fetch_assoc()) {
-    //         $path = $row["path"];
-    //         $profileimg_path = "/profile_images/$path";
-    //     }
-    // } else {
-    //     echo "<script>console.log('user has no profile img')</script>";
-    // }
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -46,44 +34,13 @@
         <span id="authentication__separate">or</span>
         <button class="authentication__btn btn--register">Register</button>
 
-        <section id="login" class="authentication__form <?php if(isset($_GET["wrongcredentials"])) echo "active"; ?>">
-            <span class="form__title">Log In</span>
-            <form id="form__log" action="./login.php" method="POST">
-                <label for="username">Username</label>
-                <input name="username" required minlength="3" maxlength="16" type="text" placeholder="elonmusk777">
-                <label for="password">Password</label>
-                <input name="password" required minlength="8" maxlength="16" type="password" placeholder="********">
-                <input type="hidden" name="type" id="type" value="login" />
-                <input type="submit" name="log_submit" value="^" class="form__submit">
-            </form>
-        </section>
+        <?php include("./components/forms/login.php"); ?> 
 
-        <section id="register" class="authentication__form <?php if(isset($_GET["fullname"])) echo "active"; ?>">
-            <span class="form__title">Register</span>
-            <form id="form__register" action="./register.php" method="POST">
-                <?php if(isset($_GET["alreadyexists"])) echo "<span class=\"error\">Username or email already exists"; ?></span>
-                <label for="fullname">Full Name (this is how other users will see you)</label>
-                <input name="fullname" required minlength="3" maxlength="48" type="text" value="<?php if(isset($_GET["fullname"])) echo $_GET["fullname"] ?>">
-                <label for="username">Username (this is how you will log in)</label>
-                <input name="username" required minlength="3" maxlength="16" type="text" value="<?php if(isset($_GET["username"])) echo $_GET["username"] ?>">
-                <label for="email">Email</label>
-                <input name="email" required minlength="8" maxlength="16" type="email" value="<?php if(isset($_GET["email"])) echo $_GET["email"] ?>">
-                <label for="password">Password</label>
-                <input name="password" required minlength="8" maxlength="16" type="password">
-                <label for="password2">Repeat password</label>
-                <input name="password2" required minlength="8" maxlength="16" type="password">
-                <input type="hidden" name="type" id="type" value="register" />
-                <input type="submit" name="register_submit" value="^" class="form__submit">
-            </form>
-
-        </section>
+        <?php include("./components/forms/register.php"); ?>
     </section>
     <!-- <input style="display: none;" id="file" type="file"> -->
 
-    <form class="form-profile-img" action="./upload.php" method="POST" enctype="multipart/form-data">
-        <input type="file" name="file" />
-        <button name="submit" type="submit">Upload</button>
-    </form>
+    <?php include("./components/forms/upload.php"); ?> 
 
     <aside id="sidebar">
         <header>
@@ -108,7 +65,7 @@
                             Your name
                         </p>
 
-                        <form class="user-profile-name-display" action="./update.php" method="POST">
+                        <form class="user-profile-name-display" action="./modules/update.php" method="POST">
                             <input id="fullname" name="fullname" class="profile-input user-name" value="<?php echo $username; ?>" placeholder="Full name" required minlength="3" maxlength="25">
 
                             <button class="btn btn-change btn-change-name"><div class="pencil-icon profile-icon"></div></button>
@@ -121,7 +78,7 @@
                         </p>
                     </div>
 
-                    <form class="user-profile-status" action="./update.php" method="POST">
+                    <form class="user-profile-status" action="./modules/update.php" method="POST">
                         <p class="user-profile-status-title">Status</p>
 
                         <div class="user-profile-status-display">
@@ -147,7 +104,7 @@
                         <li>New group</li>
                         <li>Starred messages</li>
                         <li>Settings</li>
-                        <li><button><a href="logout.php">Log out</a></button></li>
+                        <li><button><a href="./modules/logout.php">Log out</a></button></li>
                     </ul>
                 </div>
             </nav>
@@ -160,136 +117,7 @@
 
         <section id="chats">
             <ul>
-                <?php
-                    include("contacts.php");
-
-                    foreach($users as $contact) {
-                        $contactName = $contact["fullname"];
-                        $contactProfileImgId = $contact["profileimg_id"];
-                        $contactProfileImgPath = getProfileImgPath($conn, $contactProfileImgId);
-                        echo "
-                        <li class=\"chat chat1\">
-                            <div class=\"chat1-profile\">
-                                <img src=\"./$contactProfileImgPath\" alt=\"\" class=\"chat1-profile-img\">
-                            </div>
-
-                            <div class=\"chat_right\">
-                                <div class=\"chat-details\">
-                                    <span class=\"chat-name\">
-                                        $contactName
-                                    </span>
-            
-                                    <span class=\"chat-time\">
-                                        14:59
-                                    </span>
-                                </div>
-            
-                                <div class=\"chat-last-msg\">
-                                    <div class=\"chat-check check\"></div>
-                                    <span class=\"chat-last-msger-text\">
-                                        Lorem ipsum blabla
-                                    </span>
-                                </div>
-                            </div>
-                        </li>";
-                    }
-                ?>
-                <li class="chat chat1">
-                    <div class="chat1-profile">
-                        <img src="./images/girl1.jpeg" alt="" class="chat1-profile-img">
-                    </div>
-
-                    <div class="chat_right">
-                        <div class="chat-details">
-                            <span class="chat-name">
-                                Laura
-                            </span>
-    
-                            <span class="chat-time">
-                                14:59
-                            </span>
-                        </div>
-    
-                        <div class="chat-last-msg">
-                            <div class="chat-check check"></div>
-                            <span class="chat-last-msger-text">
-                                Lorem ipsum blabla
-                            </span>
-                        </div>
-                    </div>
-                </li>
-                <li class="chat chat2">
-                    <div class="chat2-profile">
-                        <img src="./images/girl2.jpeg" alt="" class="chat2-profile-img">
-                    </div>
-                    
-                    <div class="chat_right">
-                        <div class="chat-details">
-                            <span class="chat-name">
-                                Marina
-                            </span>
-                        
-                            <span class="chat-time">
-                                12:32
-                            </span>
-                        </div>
-                        
-                        <div class="chat-last-msg">
-                            <div class="chat-check doublecheck"></div>
-                            <span class="chat-last-msger-text">
-                                Lorem ipsum blabla
-                            </span>
-                        </div>
-                    </div>
-                </li>
-                <li class="chat chat3">
-                    <div class="chat3-profile">
-                        <img src="./images/guy.jpeg" alt="" class="chat3-profile-img">
-                    </div>
-                    
-                    <div class="chat_right">
-                        <div class="chat-details">
-                            <span class="chat-name">
-                                Paul
-                            </span>
-                        
-                            <span class="chat-time">
-                                yesterday
-                            </span>
-                        </div>
-                        
-                        <div class="chat-last-msg">
-                            <div class="chat-check doublecheck bluecheck"></div>
-                            <span class="chat-last-msger-text">
-                                Lorem ipsum blabla
-                            </span>
-                        </div>
-                    </div>
-                </li>
-                <li class="chat chat4">
-                    <div class="chat4-profile">
-                        <img src="./images/woman.jpeg" alt="" class="chat1-profile-img">
-                    </div>
-                    
-                    <div class="chat_right">
-                        <div class="chat-details">
-                            <span class="chat-name">
-                                Mama
-                            </span>
-                        
-                            <span class="chat-time">
-                                Thursday
-                            </span>
-                        </div>
-                        
-                        <div class="chat-last-msg">
-                            <div class="chat-check doublecheck bluecheck"></div>
-                            <span class="chat-last-msger-text">
-                                Lorem ipsum blabla
-                            </span>
-                        </div>
-                    </div>
-                </li>
+                <?php include("./components/contacts.php"); ?>
             </ul>
         </section>
     </aside>

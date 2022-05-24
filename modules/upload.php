@@ -45,7 +45,7 @@ error_reporting(E_ALL);
                     if(move_uploaded_file($fileTmpName, $fileDestination)){
                         // header("Location: index.php?image=$fileDestination", TRUE, 301);
                         
-                        include("db.php");
+                        include("../db.php");
 
                         $sql = "INSERT INTO `profile_images` (path)
                                 VALUES ('$newFileName')";
@@ -87,4 +87,5 @@ error_reporting(E_ALL);
             echo "You cannot upload files of this type!";
         }
     }
+    header("Location: ../index.php", TRUE, 301);
 ?>

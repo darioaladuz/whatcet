@@ -9,7 +9,7 @@
 <body>
 <?php 
     session_start();
-    include("./db.php");
+    include("../db.php");
 
     $username = $_SESSION["user"]["username"];
     $fullname = $_POST["fullname"];
@@ -44,7 +44,7 @@
     }
 
     $conn->close();
-    header("Location: index.php", TRUE, 301);
+    header("Location: ../index.php", TRUE, 301);
 ?>
 </body>
 </html>

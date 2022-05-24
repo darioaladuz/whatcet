@@ -1,6 +1,6 @@
 <?php 
     session_start();
-    include("./db.php");
+    include("../db.php");
 
     echo "working<br>";
 
@@ -22,5 +22,5 @@
     } else {
         echo "Gdoobye";
     }
-    header("Location: index.php", TRUE, 301);
+    header("Location: ../index.php", TRUE, 301);
 ?>
