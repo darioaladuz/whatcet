@@ -89,37 +89,7 @@ const chatDropdownMenuClose = () => {
 
 chatMenuBtn.addEventListener('click', chatDropdownMenuOpen);
 
-// enter and exit chat logic
-const sidebar = document.getElementById('sidebar')
-// const chat = document.querySelector('.chat1');
-// const chatScreen = document.querySelector('.chat_screen');
-// const arrowBack = document.querySelector('.arrow-back-icon.chat-icon');
-// const welcome = document.querySelector('.welcome-page');
 
-// const toggleChat = () => {
-//     if(document.documentElement.clientWidth < 1024) {
-//         sidebar.classList.toggle('off');
-//         chatScreen.classList.toggle('on');
-//     } else {
-//         chatScreen.classList.add('on');
-//         welcome.classList.add('off');
-//         sidebar.classList.remove('off');
-//     } 
-// }
-// // enter chat
-// chat.addEventListener('click', toggleChat)
-// // go back
-// arrowBack.addEventListener('click', toggleChat)
-
-// start scrolling from the bottom on chat
-
-// const messages = document.querySelector('.messages');
-// messages.scrollTo(0, messages.scrollHeight);
-
-// fix small bug:
-// remove sidebar class that makes it disappear
-// when window is resized to tablet panoramic or small laptop size
-// due to bad functionality when resizing after clicking chat
 
 const body = document.querySelector('body');
 window.addEventListener('resize', (e) => {
@@ -211,6 +181,71 @@ login.addEventListener('click', e => {
 
 register.addEventListener('click', e => {
     e.stopPropagation();
+})
+
+// CONTACTS FUNCTIONALITY && CHATS
+
+const contactChats = document.querySelectorAll(".chat");
+// enter and exit chat logic
+const sidebar = document.getElementById('sidebar');
+// const chat = document.querySelector('.chat1');
+const chatScreen = document.querySelector('.chat_screen');
+const welcome = document.querySelector('.welcome-page');
+const arrowBack = document.querySelector('.arrow-back-icon.chat-icon');
+
+const toggleChat = () => {
+    console.log("hELLOOOO");
+    if(document.documentElement.clientWidth < 1024) {
+        sidebar.classList.toggle('off');
+        chatScreen.classList.toggle('on');
+    } else {
+        chatScreen.classList.add('on');
+        welcome.classList.add('off');
+        sidebar.classList.remove('off');
+    }}
+
+arrowBack.addEventListener('click', toggleChat);
+
+contactChats.forEach(contactChat => {
+    contactChat.addEventListener("click", () => {
+        console.log(contactChat.dataset.username);
+        const contactUsername = contactChat.dataset.username;
+        chatScreen.dataset.contact = contactUsername;
+
+        $.ajax({
+            method: "POST",
+            url: "modules/find_contact.php",
+            data: { "contactUsername": contactUsername },
+            beforeSend: () => console.log('Sending'),
+        }).done((info) => {
+            const contact = JSON.parse(info);
+
+            console.log(contact);
+
+            const chatDOMUsername = document.querySelector(".chat-user-name");
+            const chatDOMUserImg = document.querySelector(".chat-user-img");
+
+            chatDOMUsername.textContent = contact.fullname;
+            chatDOMUserImg.src = `profile_images/${contact.path}`;
+        })
+        
+        toggleChat();
+        
+        // }
+        // // enter chat
+        // chat.addEventListener('click', toggleChat)
+        // // go back
+
+        // start scrolling from the bottom on chat
+
+        const messages = document.querySelector('.messages');
+        messages.scrollTo(0, messages.scrollHeight);
+
+        // fix small bug:
+        // remove sidebar class that makes it disappear
+        // when window is resized to tablet panoramic or small laptop size
+        // due to bad functionality when resizing after clicking chat
+    })
 })
 
 // frontend login form (just for now until db is added)

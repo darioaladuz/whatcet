@@ -10,6 +10,6 @@
         echo "<script>console.log('Connection error')</script>";
         die("Connection failed: " . $conn->connection_error);
     } else {
-        echo "<script>console.log('Connected successfuly')</script>";
+        // echo "<script>console.log('Connected successfuly')</script>";
     }
 ?>

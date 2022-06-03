@@ -2,12 +2,27 @@
     include("./modules/contacts.php");
 
     if(isset($_SESSION["user"])){
-        foreach($users as $contact) {
+        $usersToShow = [];
+        if(count($filter) > 0) {
+            $usersToShow[0] = $filter;
+            echo "
+                <li>
+                    <button>Remove filter</button>
+                </li>
+            ";
+        } else {
+            $usersToShow = $users;
+        }
+
+        // var_dump($usersToShow);
+
+        foreach($usersToShow as $contact) {
             $contactName = $contact["fullname"];
+            $contactUsername = $contact["username"];
             $contactProfileImgId = $contact["profileimg_id"];
             $contactProfileImgPath = getProfileImgPath($conn, $contactProfileImgId);
             echo "
-            <li class=\"chat chat1\">
+            <li class=\"chat chat1\" data-username=\"$contactUsername\">
                 <div class=\"chat1-profile\">
                     <img src=\"./$contactProfileImgPath\" alt=\"\" class=\"chat1-profile-img\">
                 </div>
