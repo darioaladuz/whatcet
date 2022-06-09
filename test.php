@@ -55,50 +55,29 @@
         include("db.php");
         $user = $_SESSION["user"];
         $id = $user["id"];
-        $id2 = 749501;
-        
-        $sql = "SELECT * FROM `relationships`
-                WHERE `user1_id` = $id
-                AND `user2_id` = $id2";
+        $id2 = 749506;
+
+        $sql = "SELECT r.conversation_id, m.text, m.user_sender_id, m.user_receiver_id, m.timestamp
+                FROM `relationships` r
+                INNER JOIN `messages` m
+                    on r.conversation_id = m.conversation_id
+                WHERE r.user1_id = $id AND r.user2_id = $id2";
 
         $result = $conn->query($sql);
         
         if ($result->num_rows > 0) {
-        // output data of each row
+        // // output data of each row
+        echo "<div class=\"messages\">";
         while($row = $result->fetch_assoc()) {
-            echo "<p>";
-            echo "Ok, we found a relationship";
+            $messageClass = intval($row["user_sender_id"]) === 749500 ? "sender" : "receiver"; 
+            $timestamp = $row["timestamp"];
+            $timestamp = strtotime($timestamp);    
+            $timestamp = date("H:i", $timestamp); 
+            echo "<p class=\"message $messageClass\">";
+            echo $row["text"] . ' ' . $timestamp;
             echo "</p>";
-
-            $sql2 = "SELECT u.username
-                        , c.id
-                        , m.text
-                        , m.user_sender_id
-                    FROM users u
-                    INNER JOIN conversation_relationships cr
-                        on u.id = cr.user_id
-                    INNER JOIN conversations c
-                        on cr.conversation_id = c.id
-                    INNER JOIN messages m
-                        on c.id = m.conversation_id
-                    WHERE u.username = 'dario'
-                    AND (u.id = m.user_sender_id OR u.id = m.user_receiver_id)";
-            
-            $result2 = $conn->query($sql2);
-            
-            if($result2->num_rows > 0) {
-                echo "<div class=\"messages\">";
-                while($row2 = $result2->fetch_assoc()){
-                    $class = $row2["user_sender_id"] === $id ? "sender" : "receiver";
-                    echo "<p class=\"message $class\">";
-                    echo $row2["text"];
-                    echo "</p>";
-                }
-                echo "</div>";
-            } else {
-                echo "There are no messages";
-            }
         }
+        echo "</div>";
         } else {
             echo "0 results";
         }
@@ -113,15 +92,19 @@
         if(isset($_GET["message"])){
             $sql = "SELECT * FROM `relationships`
                 WHERE `user1_id` = $id
-                AND `user2_id` = $id2";
+                AND `user2_id` = 749506";
+
+            $text = $_GET["message"];
 
             $result = $conn->query($sql);
             
             if ($result->num_rows > 0) {
-                // use deep inner join code in order to find conversation id
                 $message = $_GET["message"];
+                echo $message;
+                $result = mysqli_fetch_assoc($result);
+                $conversation_id = $result["conversation_id"];
 
-                $sql = "INSERT INTO `messages` (user_sender_id, user_receiver_id, text, conversation_id) VALUES ($id, $id2, '$message', 1)";
+                $sql = "INSERT INTO `messages` (user_sender_id, user_receiver_id, text, conversation_id) VALUES ($id, $id2, '$message', $conversation_id)";
 
                 if ($conn->query($sql) === TRUE) {
                     echo "New record created successfully";
@@ -129,12 +112,33 @@
                   } else {
                     echo "Error: " . $sql . "<br>" . $conn->error;
                   }
+                echo "<div class=\"messages\">";
             } else {
-                // create relationship
                 // create conversation
-                // create conversation relationship
-                // create message
+                $sql = "INSERT INTO `conversations` (id) VALUES (NULL)";
+                if ($conn->query($sql) === TRUE) {
+                    // create relationship
+                    $conversation_id = $conn->insert_id;
+                    $sql = "INSERT INTO `relationships` (user1_id, user2_id, blocked, conversation_id) VALUES ($id, $id2, 0, $conversation_id), ($id2, $id, 0, $conversation_id)";
+                    if($conn->query($sql) === TRUE) {
+                        // create message
+                        $sql = "INSERT INTO `messages` (user_sender_id, user_receiver_id, text, conversation_id) VALUES ($id, $id2, '$text', $conversation_id)";
+
+                        if($conn->query($sql) === TRUE) {
+                            echo "New relationship created and message sent";
+                            header("Location: test.php", TRUE, 301);
+                        } else {
+                            echo "Error: " . $sql . "<br>" . $conn->error;
+                        }
+                    } else {
+                        echo "Error: " . $sql . "<br>" . $conn->error;
+                    }
+                  } else {
+                    echo "Error: " . $sql . "<br>" . $conn->error;
+                  }
                 // is it too much? find ways to make it more efficient
+
+                echo "Relationship doesn't exist.";
             }
         }
     ?>

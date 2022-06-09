@@ -18,11 +18,11 @@
 
         foreach($usersToShow as $contact) {
             $contactName = $contact["fullname"];
-            $contactUsername = $contact["username"];
+            $contactId = $contact["id"];
             $contactProfileImgId = $contact["profileimg_id"];
             $contactProfileImgPath = getProfileImgPath($conn, $contactProfileImgId);
             echo "
-            <li class=\"chat chat1\" data-username=\"$contactUsername\">
+            <li class=\"chat chat1\" data-id=\"$contactId\">
                 <div class=\"chat1-profile\">
                     <img src=\"./$contactProfileImgPath\" alt=\"\" class=\"chat1-profile-img\">
                 </div>

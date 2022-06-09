@@ -1,8 +1,6 @@
 <main class="chat_screen">
     <?php 
-        // include("./modules/find_contact.php");
-
-
+        // include("../../modules/find_contact.php");
     ?>
     <header class="header chat-header">
         <div class="chat-user">

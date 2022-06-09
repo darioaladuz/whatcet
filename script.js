@@ -209,13 +209,13 @@ arrowBack.addEventListener('click', toggleChat);
 contactChats.forEach(contactChat => {
     contactChat.addEventListener("click", () => {
         console.log(contactChat.dataset.username);
-        const contactUsername = contactChat.dataset.username;
-        chatScreen.dataset.contact = contactUsername;
+        const contactId = contactChat.dataset.id;
+        chatScreen.dataset.contact = contactId;
 
         $.ajax({
             method: "POST",
             url: "modules/find_contact.php",
-            data: { "contactUsername": contactUsername },
+            data: { "contactId": contactId },
             beforeSend: () => console.log('Sending'),
         }).done((info) => {
             const contact = JSON.parse(info);
@@ -227,6 +227,50 @@ contactChats.forEach(contactChat => {
 
             chatDOMUsername.textContent = contact.fullname;
             chatDOMUserImg.src = `profile_images/${contact.path}`;
+        })
+
+        $.ajax({
+            method: "POST",
+            url: "modules/find_messages.php",
+            data: { "contactId": contactId },
+            beforeSend: () => console.log('Sending'),
+        }).done((info) => {
+            const messages = JSON.parse(info);
+
+            console.log(messages);
+
+            const messagesDOM = document.querySelector(".messages");
+
+            messages.forEach(message => {
+                const messageDOM = document.createElement("li");
+                const messageTextDOM = document.createElement("span");
+                const messageDetailsDOM = document.createElement("div");
+                const messageTimeDOM = document.createElement("span");
+
+                const sender = contactId === message.user_sender_id ? false : true;
+
+                messageDOM.classList.add("message");
+                messageDOM.classList.add(`${sender ? "user-message" : "contact-message"}`);
+                messageTextDOM.classList.add(`${sender ? "user-message-text" : "contact-message-text"}`);
+                messageDetailsDOM.classList.add(`${sender ? "user-message-details" : "contact-message-details"}`);
+                messageTimeDOM.classList.add("message-time");
+
+                messageTextDOM.textContent = message.text;
+                messageTimeDOM.textContent = message.timestamp;
+
+                messageDetailsDOM.appendChild(messageTimeDOM);
+                messageDOM.appendChild(messageTextDOM);
+                messageDOM.appendChild(messageDetailsDOM);
+                messagesDOM.appendChild(messageDOM);
+
+                // format hours here
+            })
+
+            // const chatDOMUsername = document.querySelector(".chat-user-name");
+            // const chatDOMUserImg = document.querySelector(".chat-user-img");
+
+            // chatDOMUsername.textContent = contact.fullname;
+            // chatDOMUserImg.src = `profile_images/${contact.path}`;
         })
         
         toggleChat();

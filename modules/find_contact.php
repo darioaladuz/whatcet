@@ -1,19 +1,18 @@
 <?php 
     include("../db.php");
 
-    $contact = [
-        "username" => "Dario"
-    ];
-
-    
+    // $contact = [
+    //     "username" => "Dario"
+    // ]; 
         
-    if(isset($_POST["contactUsername"])){
-        $contactUsername = $_POST["contactUsername"];
+    if(isset($_POST["contactId"])){
+        $contactId = $_POST["contactId"];
         // $sql = "SELECT * FROM `users` WHERE `username` = '$contactUsername'";
-        $sql = "SELECT * FROM `users` 
-                INNER JOIN `profile_images` 
-                ON users.profileimg_id = profile_images.id 
-                WHERE `username` = '$contactUsername'";
+        $sql = "SELECT u.fullname, pimg.path
+                FROM `users` u
+                INNER JOIN `profile_images` pimg
+                ON u.profileimg_id = pimg.id 
+                WHERE u.id = '$contactId'";
         $result = $conn->query($sql);
 
         if($result->num_rows > 0){
