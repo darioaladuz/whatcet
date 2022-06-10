@@ -211,6 +211,7 @@ contactChats.forEach(contactChat => {
         console.log(contactChat.dataset.username);
         const contactId = contactChat.dataset.id;
         chatScreen.dataset.contact = contactId;
+        let contactName;
 
         $.ajax({
             method: "POST",
@@ -220,12 +221,14 @@ contactChats.forEach(contactChat => {
         }).done((info) => {
             const contact = JSON.parse(info);
 
+            contactName = contact.fullname;
+
             console.log(contact);
 
             const chatDOMUsername = document.querySelector(".chat-user-name");
             const chatDOMUserImg = document.querySelector(".chat-user-img");
 
-            chatDOMUsername.textContent = contact.fullname;
+            chatDOMUsername.textContent = contactName;
             chatDOMUserImg.src = `profile_images/${contact.path}`;
         })
 
@@ -237,33 +240,169 @@ contactChats.forEach(contactChat => {
         }).done((info) => {
             const messages = JSON.parse(info);
 
-            console.log(messages);
+            const dateFormatter = (timestamp) => {
+                const dt = new Date(timestamp);
+
+                let y = dt.getFullYear();
+                let d = dt.getDate();
+                let m = dt.getMonth() + 1;
+                
+                if(d < 10){
+                    d = `0${d}`;
+                }
+
+                if(m < 10){
+                    m = `0${m}`;
+                }
+
+                const formattedDate = `${y}-${m}-${d}`;
+
+                return formattedDate;
+            }
+
+            const messagesWithFormattedDate = messages.map(message => ({...message, date: dateFormatter(message.timestamp)}));
+
+            let today = new Date();
+            let yesterday = new Date();
+
+            yesterday.setDate(yesterday.getDate() - 1);
+
+            // const group = arr => {
+            //     return arr.reduce((acc, val) => {
+            //         const { data, map } = acc;
+            //         const ind = map.get(val);
+            //         // console.log({ map });
+            //         // console.log({ val });
+            //         // console.log({ data });
+            //         console.log({ ind });
+            //         if(map.has(val.date)){
+            //             console.log("working");
+            //             data[ind - 1].push(val);
+            //         } else {
+            //             map.set(val, data.push([val.date]));
+            //         }
+            //         return { data, map };
+            //         }, {
+            //         data: [],
+            //         map: new Map()
+            //         }).data;
+            //  };
+
+            //  const messagesByDay = group(messagesWithFormattedDate);
+
+            //  console.log({messagesByDay});
+
+            // console.log({ today: dateFormatter(today) })
+
+            // console.log({messagesWithFormattedDate});
+
+            // console.log(messages);
+
+            function groupArrayOfObjects(list, key) {
+                return list.reduce(function(rv, x) {
+                  (rv[x[key]] = rv[x[key]] || []).push(x);
+                  return rv;
+                }, {});
+              };
+
+            const messagesByDayTemp = groupArrayOfObjects(messagesWithFormattedDate, "date");
+
+            console.log( messagesByDayTemp );
+
+            const messagesByDay = Object.entries(messagesByDayTemp);
+
+            console.log(messagesByDay);
+
+            // messagesByDay.forEach(message => console.log(message));
 
             const messagesDOM = document.querySelector(".messages");
 
-            messages.forEach(message => {
-                const messageDOM = document.createElement("li");
-                const messageTextDOM = document.createElement("span");
-                const messageDetailsDOM = document.createElement("div");
-                const messageTimeDOM = document.createElement("span");
+            messagesDOM.innerHTML = "";
 
-                const sender = contactId === message.user_sender_id ? false : true;
+            if(messages.length === 0) {
+                const emptyChatMessage = document.createElement("p");
 
-                messageDOM.classList.add("message");
-                messageDOM.classList.add(`${sender ? "user-message" : "contact-message"}`);
-                messageTextDOM.classList.add(`${sender ? "user-message-text" : "contact-message-text"}`);
-                messageDetailsDOM.classList.add(`${sender ? "user-message-details" : "contact-message-details"}`);
-                messageTimeDOM.classList.add("message-time");
+                emptyChatMessage.classList.add("alert");
+                emptyChatMessage.classList.add("alert-empty-chat");
 
-                messageTextDOM.textContent = message.text;
-                messageTimeDOM.textContent = message.timestamp;
+                emptyChatMessage.textContent = `This chat is empty. Send your first message to ${contactName}!`;
 
-                messageDetailsDOM.appendChild(messageTimeDOM);
-                messageDOM.appendChild(messageTextDOM);
-                messageDOM.appendChild(messageDetailsDOM);
-                messagesDOM.appendChild(messageDOM);
+                messagesDOM.appendChild(emptyChatMessage);
+            }
 
-                // format hours here
+            messagesByDay.forEach(messageGroup => {
+                if(messageGroup[0] === dateFormatter(today)){
+                    console.log("Today : ");
+                } else {
+                    console.log(`${messageGroup[0]} : `);
+                }
+                messageGroup[1].forEach(message => {
+                    console.log(message);
+                })
+            })
+
+            messagesByDay.forEach(messageGroup => {
+                messageGroup[1].forEach(message => {
+                    const messageDOM = document.createElement("li");
+                    const messageTextDOM = document.createElement("span");
+                    const messageDetailsDOM = document.createElement("div");
+                    const messageTimeDOM = document.createElement("span");
+    
+                    const sender = contactId === message.user_sender_id ? false : true;
+    
+                    messageDOM.classList.add("message");
+                    messageDOM.classList.add(`${sender ? "user-message" : "contact-message"}`);
+                    messageTextDOM.classList.add(`${sender ? "user-message-text" : "contact-message-text"}`);
+                    messageDetailsDOM.classList.add(`${sender ? "user-message-details" : "contact-message-details"}`);
+                    messageTimeDOM.classList.add("message-time");
+    
+                    messageTextDOM.textContent = message.text;
+    
+                    messageDetailsDOM.appendChild(messageTimeDOM);
+                    messageDOM.appendChild(messageTextDOM);
+                    messageDOM.appendChild(messageDetailsDOM);
+                    messagesDOM.appendChild(messageDOM);
+    
+                    // format hours here
+    
+                    const hourFormatter = (timestamp) => {
+                        const dt = new Date(timestamp);
+    
+                        let h = dt.getHours();
+                        let m = dt.getMinutes();
+                        
+                        if(h < 10){
+                            h = `0${h}`;
+                        }
+    
+                        if(m < 10){
+                            m = `0${m}`;
+                        }
+    
+                        const formattedHour = `${h}:${m}`;
+    
+                        return formattedHour;
+                    }
+    
+                    messageTimeDOM.textContent = hourFormatter(message.timestamp);
+                })
+                let dateText = "";
+
+                    if(messageGroup[0] === dateFormatter(today)) { 
+                        dateText = "Today";
+                    } else if (messageGroup[0] === dateFormatter(yesterday)) {
+                        dateText = "Yesterday";
+                    } else {
+                        dateText = messageGroup[0].split("-").reverse().join("-");
+                    }
+
+                     const dateDOM = document.createElement("p");
+                        
+                    dateDOM.classList.add("date");
+    
+                    dateDOM.textContent = dateText;
+    
+                    messagesDOM.appendChild(dateDOM);
             })
 
             // const chatDOMUsername = document.querySelector(".chat-user-name");

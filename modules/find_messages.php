@@ -15,7 +15,8 @@
                 FROM `relationships` r
                 INNER JOIN `messages` m
                 ON r.conversation_id = m.conversation_id 
-                WHERE r.user1_id = $id AND r.user2_id = $contactId";
+                WHERE r.user1_id = $id AND r.user2_id = $contactId
+                ORDER BY m.timestamp DESC";
 
         $result = $conn->query($sql);
 
@@ -28,6 +29,9 @@
                     array_push($messages, $message);
                 }
             }
+            exit(json_encode($messages));
+        } else {
+            $messages = array();
             exit(json_encode($messages));
         }
 

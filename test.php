@@ -55,7 +55,7 @@
         include("db.php");
         $user = $_SESSION["user"];
         $id = $user["id"];
-        $id2 = 749506;
+        $id2 = 749501;
 
         $sql = "SELECT r.conversation_id, m.text, m.user_sender_id, m.user_receiver_id, m.timestamp
                 FROM `relationships` r
@@ -92,7 +92,7 @@
         if(isset($_GET["message"])){
             $sql = "SELECT * FROM `relationships`
                 WHERE `user1_id` = $id
-                AND `user2_id` = 749506";
+                AND `user2_id` = 749501";
 
             $text = $_GET["message"];
 
