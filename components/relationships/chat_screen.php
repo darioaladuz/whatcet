@@ -9,11 +9,11 @@
 
             <div class="chat-user-details">
                 <span class="chat-user-name">
-                    Laura
+                    
                 </span>
 
                 <span class="chat-user-last-seen">
-                    online
+                    
                 </span>
             </div>
         </div>
@@ -39,153 +39,7 @@
 
     <section class="chat_window">
         <ul class="messages">
-            <li class="message contact-message">
-                <span class="contact-message-text">
-                    Hi
-                </span>
             
-                <div class="contact-message-details">
-                    <span class="message-time">
-                        14:11
-                    </span>
-            
-                    <!-- <div class="chat-check doublecheck">
-                    </div> -->
-                </div>
-            </li>
-            <li class="message user-message">
-                <span class="user-message-text">
-                    Hello
-                </span>
-            
-                <div class="user-message-details">
-                    <span class="message-time">
-                        14:05
-                    </span>
-            
-                    <div class="chat-check doublecheck bluecheck">
-        
-                    </div>
-                </div>
-            </li>
-            <li class="message user-message">
-                <span class="user-message-text">
-                    sure dw
-                </span>
-            
-                <div class="user-message-details">
-                    <span class="message-time">
-                        12:42
-                    </span>
-            
-                    <div class="chat-check doublecheck bluecheck">
-        
-                    </div>
-                </div>
-            </li>
-            <li class="message contact-message">
-                <span class="contact-message-text">
-                    TTYL gtg
-                </span>
-            
-                <div class="contact-message-details">
-                    <span class="message-time">
-                        12:38
-                    </span>
-            
-                    <!-- <div class="chat-check doublecheck">
-                    </div> -->
-                </div>
-            </li>
-            <li class="message user-message">
-                <span class="user-message-text">
-                    Lorem ipsum dolor sit amet consectetur adipisicing elit. Magni, ullam.
-                </span>
-            
-                <div class="user-message-details">
-                    <span class="message-time">
-                        12:24
-                    </span>
-            
-                    <!-- <div class="chat-check doublecheck">
-                    </div> -->
-                </div>
-            </li>
-
-            <li class="message user-message">
-                <span class="user-message-text">
-                    Lorem ipsum dolor sit amet consectetur adipisicing elit. Magni, ullam.
-                </span>
-            
-                <div class="user-message-details">
-                    <span class="message-time">
-                        12:24
-                    </span>
-            
-                    <!-- <div class="chat-check doublecheck">
-                    </div> -->
-                </div>
-            </li>
-
-            <li class="message contact-message">
-                <span class="contact-message-text">
-                    Lorem ipsum dolor, sit amet consectetur adipisicing elit. Ducimus, adipisci.
-                </span>
-            
-                <div class="contact-message-details">
-                    <span class="message-time">
-                        12:10
-                    </span>
-            
-                    <!-- <div class="chat-check doublecheck">
-                    </div> -->
-                </div>
-            </li>
-
-            <li class="message contact-message">
-                <span class="contact-message-text">
-                    Lorem ipsum dolor, sit amet consectetur adipisicing elit. Ducimus, adipisci.
-                </span>
-            
-                <div class="contact-message-details">
-                    <span class="message-time">
-                        12:08
-                    </span>
-            
-                    <!-- <div class="chat-check doublecheck">
-                    </div> -->
-                </div>
-            </li>
-
-            <li class="message user-message">
-                <span class="user-message-text">
-                    Lorem ipsum dolor sit amet consectetur adipisicing elit. Magni, ullam.
-                </span>
-            
-                <div class="user-message-details">
-                    <span class="message-time">
-                        12:05
-                    </span>
-            
-                    <!-- <div class="chat-check doublecheck">
-                    </div> -->
-                </div>
-            </li>
-
-            <li class="message contact-message">
-                <span class="contact-message-text">
-                    Lorem ipsum dolor, sit amet consectetur adipisicing elit. Ducimus, adipisci.
-                </span>
-            
-                <div class="contact-message-details">
-                    <span class="message-time">
-                        11:54
-                    </span>
-            
-                    <!-- <div class="chat-check doublecheck">
-                    </div> -->
-                </div>
-            </li>
         </ul>
     </section>
 
@@ -221,14 +75,15 @@
             </div>
         </div>
 
-        <form action="" class="chat-bar-msg">
-            <input type="text" class="chat-input" placeholder="Type a message">
+        <form action="../../modules/sendMessage.php" method="POST" class="chat-bar-msg">
+            <input type="text" name="message" class="chat-input" placeholder="Type a message">
+            <button type="submit" name="submit">[]</button>
         </form>
 
         <!-- <div class="chat-bar-mic">
             <span class="chat-bar-mic-btn chat-btn"><img src="./assets/icons/microphone.svg" alt=""></span>
         </div> -->
 
-        <div class="chat-bar-icon mic"></div>
+        <!-- <div class="chat-bar-icon mic"></div> -->
     </section>
 </main>

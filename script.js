@@ -2,16 +2,31 @@
 
 const profileImgModal = document.querySelector('.form-profile-img');
 const btnProfileImgModal = document.querySelector('.btn-modal-profileimg');
+let imageSrc;
 
 btnProfileImgModal.addEventListener('click', () => {
-    console.log('hello');
-    if(profileImgModal.style.display === "block"){
+    const image = document.getElementById('form__img');
+    if(profileImgModal.style.display === "flex"){
         profileImgModal.style.display = "none";
         btnProfileImgModal.innerHTML = "<div class=\"pencil-icon profile-icon\"></div>";
+        image.src = imageSrc;
+        // console.log({imageSrc});
     } else {
-        profileImgModal.style.display = "block";
+        profileImgModal.style.display = "flex";
         btnProfileImgModal.innerHTML = "close";
+        imageSrc = image.src;
     }
+})
+
+// change profile img form image
+
+const profileImageInput = document.getElementById('profileimg__input');
+
+profileImageInput.addEventListener("change", e => {
+    // console.log("working");
+    const image = document.getElementById('form__img');
+    const source = URL.createObjectURL(e.target.files[0]);
+    image.src = source;
 })
 
 // logic for opening and closing profile
@@ -37,13 +52,13 @@ const html = document.querySelector('html');
 const dropdownMenuOpen = (e) => {
     // add open class to show menu
     dropdownMenu.classList.add('open');
-    console.log('added');
+    // console.log('added');
     // add click event to screen so we can close menu 
     // when we click outside
     html.addEventListener('click', dropdownMenuClose)
     // if we click the menu it doesn't close
     dropdownMenu.addEventListener('click', (e) => {
-        console.log('working');
+        // console.log('working');
         e.stopPropagation();
     })
     e.stopPropagation();
@@ -52,7 +67,7 @@ const dropdownMenuOpen = (e) => {
 const dropdownMenuClose = () => {
     dropdownMenu.classList.remove('open');
     html.removeEventListener('click', dropdownMenuClose);
-    console.log('removed');
+    // console.log('removed');
 }
 
 menuBtn.addEventListener('click', dropdownMenuOpen);
@@ -69,13 +84,13 @@ const chatDropdownMenu = document.querySelector('.chat-dropdown-menu');
 const chatDropdownMenuOpen = (e) => {
     // add open class to show menu
     chatDropdownMenu.classList.add('open');
-    console.log('added');
+    // console.log('added');
     // add click event to screen so we can close menu 
     // when we click outside
     html.addEventListener('click', chatDropdownMenuClose)
     // if we click the menu it doesn't close
     chatDropdownMenu.addEventListener('click', (e) => {
-        console.log('working');
+        // console.log('working');
         e.stopPropagation();
     })
     e.stopPropagation();
@@ -84,7 +99,7 @@ const chatDropdownMenuOpen = (e) => {
 const chatDropdownMenuClose = () => {
     chatDropdownMenu.classList.remove('open');
     html.removeEventListener('click', chatDropdownMenuClose);
-    console.log('removed');
+    // console.log('removed');
 }
 
 chatMenuBtn.addEventListener('click', chatDropdownMenuOpen);
@@ -134,7 +149,7 @@ videoBtn.addEventListener('click', () => {
 
 hangupBtn.addEventListener('click', () => {
     stopVideoCall();
-    console.log('shpould work')
+    // console.log('shpould work')
 })
 
 // auth screen
@@ -194,7 +209,7 @@ const welcome = document.querySelector('.welcome-page');
 const arrowBack = document.querySelector('.arrow-back-icon.chat-icon');
 
 const toggleChat = () => {
-    console.log("hELLOOOO");
+    // console.log("hELLOOOO");
     if(document.documentElement.clientWidth < 1024) {
         sidebar.classList.toggle('off');
         chatScreen.classList.toggle('on');
@@ -206,9 +221,69 @@ const toggleChat = () => {
 
 arrowBack.addEventListener('click', toggleChat);
 
+// messages functionality
+
+const messagesDOM = document.querySelector(".messages");
+
+const addMessageToDOM = (message, contactId, first) => {
+    console.log("working...");
+    console.log({ message, contactId });
+    const messageDOM = document.createElement("li");
+    const messageTextDOM = document.createElement("span");
+    const messageDetailsDOM = document.createElement("div");
+    const messageTimeDOM = document.createElement("span");
+
+    const sender = contactId === message.user_sender_id ? false : true;
+
+    console.log({ sender });
+
+    messageDOM.classList.add("message");
+    messageDOM.classList.add(`${sender ? "user-message" : "contact-message"}`);
+    messageTextDOM.classList.add(`${sender ? "user-message-text" : "contact-message-text"}`);
+    messageDetailsDOM.classList.add(`${sender ? "user-message-details" : "contact-message-details"}`);
+    messageTimeDOM.classList.add("message-time");
+
+    messageTextDOM.textContent = message.text;
+
+    messageDetailsDOM.appendChild(messageTimeDOM);
+    messageDOM.appendChild(messageTextDOM);
+    messageDOM.appendChild(messageDetailsDOM);
+
+    if(first) {
+        messagesDOM.insertBefore(messageDOM, messagesDOM.firstChild);
+    } else {
+        messagesDOM.appendChild(messageDOM);
+    }
+    
+    console.log(messagesDOM);
+
+    // format hours here
+
+    const hourFormatter = (timestamp) => {
+        const dt = new Date(timestamp);
+
+        let h = dt.getHours();
+        let m = dt.getMinutes();
+        
+        if(h < 10){
+            h = `0${h}`;
+        }
+
+        if(m < 10){
+            m = `0${m}`;
+        }
+
+        const formattedHour = `${h}:${m}`;
+
+        return formattedHour;
+    }
+
+    messageTimeDOM.textContent = hourFormatter(message.timestamp);
+}
+
 contactChats.forEach(contactChat => {
     contactChat.addEventListener("click", () => {
-        console.log(contactChat.dataset.username);
+        // console.log(contactChat.dataset.username);
         const contactId = contactChat.dataset.id;
         chatScreen.dataset.contact = contactId;
         let contactName;
@@ -223,7 +298,7 @@ contactChats.forEach(contactChat => {
 
             contactName = contact.fullname;
 
-            console.log(contact);
+            // console.log(contact);
 
             const chatDOMUsername = document.querySelector(".chat-user-name");
             const chatDOMUserImg = document.querySelector(".chat-user-img");
@@ -307,15 +382,13 @@ contactChats.forEach(contactChat => {
 
             const messagesByDayTemp = groupArrayOfObjects(messagesWithFormattedDate, "date");
 
-            console.log( messagesByDayTemp );
+            // console.log( messagesByDayTemp );
 
             const messagesByDay = Object.entries(messagesByDayTemp);
 
-            console.log(messagesByDay);
+            // console.log(messagesByDay);
 
             // messagesByDay.forEach(message => console.log(message));
-
-            const messagesDOM = document.querySelector(".messages");
 
             messagesDOM.innerHTML = "";
 
@@ -330,61 +403,20 @@ contactChats.forEach(contactChat => {
                 messagesDOM.appendChild(emptyChatMessage);
             }
 
-            messagesByDay.forEach(messageGroup => {
-                if(messageGroup[0] === dateFormatter(today)){
-                    console.log("Today : ");
-                } else {
-                    console.log(`${messageGroup[0]} : `);
-                }
-                messageGroup[1].forEach(message => {
-                    console.log(message);
-                })
-            })
+            // messagesByDay.forEach(messageGroup => {
+            //     if(messageGroup[0] === dateFormatter(today)){
+            //         console.log("Today : ");
+            //     } else {
+            //         console.log(`${messageGroup[0]} : `);
+            //     }
+            //     messageGroup[1].forEach(message => {
+            //         console.log(message);
+            //     })
+            // })
 
             messagesByDay.forEach(messageGroup => {
                 messageGroup[1].forEach(message => {
-                    const messageDOM = document.createElement("li");
-                    const messageTextDOM = document.createElement("span");
-                    const messageDetailsDOM = document.createElement("div");
-                    const messageTimeDOM = document.createElement("span");
-    
-                    const sender = contactId === message.user_sender_id ? false : true;
-    
-                    messageDOM.classList.add("message");
-                    messageDOM.classList.add(`${sender ? "user-message" : "contact-message"}`);
-                    messageTextDOM.classList.add(`${sender ? "user-message-text" : "contact-message-text"}`);
-                    messageDetailsDOM.classList.add(`${sender ? "user-message-details" : "contact-message-details"}`);
-                    messageTimeDOM.classList.add("message-time");
-    
-                    messageTextDOM.textContent = message.text;
-    
-                    messageDetailsDOM.appendChild(messageTimeDOM);
-                    messageDOM.appendChild(messageTextDOM);
-                    messageDOM.appendChild(messageDetailsDOM);
-                    messagesDOM.appendChild(messageDOM);
-    
-                    // format hours here
-    
-                    const hourFormatter = (timestamp) => {
-                        const dt = new Date(timestamp);
-    
-                        let h = dt.getHours();
-                        let m = dt.getMinutes();
-                        
-                        if(h < 10){
-                            h = `0${h}`;
-                        }
-    
-                        if(m < 10){
-                            m = `0${m}`;
-                        }
-    
-                        const formattedHour = `${h}:${m}`;
-    
-                        return formattedHour;
-                    }
-    
-                    messageTimeDOM.textContent = hourFormatter(message.timestamp);
+                    addMessageToDOM(message, contactId, false);
                 })
                 let dateText = "";
 
@@ -428,6 +460,31 @@ contactChats.forEach(contactChat => {
         // remove sidebar class that makes it disappear
         // when window is resized to tablet panoramic or small laptop size
         // due to bad functionality when resizing after clicking chat
+    })
+})
+
+// sending messages
+
+const messageForm = document.querySelector(".chat-bar-msg");
+const messageInput = document.querySelector(".chat-input");
+
+messageForm.addEventListener("submit", e => {
+    e.preventDefault();
+
+    const newMessage = messageInput.value;
+    const contactId = chatScreen.dataset.contact;
+
+    $.ajax({
+        method: "POST",
+        url: "modules/sendMessage.php",
+        data: { "message": newMessage, "contactId": contactId },
+        beforeSend: () => console.log('Sending'),
+    }).done((info) => {
+        const msg = JSON.parse(info);
+
+        // console.log({ msg });
+
+        addMessageToDOM(msg, contactId, true);
     })
 })
 

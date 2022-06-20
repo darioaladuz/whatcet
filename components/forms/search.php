@@ -10,10 +10,17 @@
     if(isset($_POST["search"])){
         $search = $_POST["search"];
 
-        $sql = "SELECT * FROM `users` WHERE `username` = '$search'";
+        $sql = "SELECT * FROM `users` WHERE `username` LIKE '%$search%'";
         $result = $conn->query($sql);
-        $result = $result->fetch_assoc();
-
-        $filter = $result;
+        $filter = array();
+        while($row = $result->fetch_assoc()) {
+            if($row["id"] !== $_SESSION["user"]["id"]){
+                if(count($filter) === 0){
+                    $filter[0] = $row;
+                } else {
+                    array_push($filter, $row);
+                }
+            }
+        }
     }
 ?>

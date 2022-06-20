@@ -4,19 +4,18 @@
     if(isset($_SESSION["user"])){
         $usersToShow = [];
         if(count($filter) > 0) {
-            $usersToShow[0] = $filter;
+            $usersToShow = $filter;
             echo "
                 <li>
-                    <button>Remove filter</button>
+                    <form method=\"GET\" action=\"index.php\"><button>Remove filter</button></form>
                 </li>
             ";
         } else {
             $usersToShow = $users;
         }
 
-        // var_dump($usersToShow);
-
         foreach($usersToShow as $contact) {
+            // var_dump($contact);
             $contactName = $contact["fullname"];
             $contactId = $contact["id"];
             $contactProfileImgId = $contact["profileimg_id"];

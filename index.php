@@ -114,14 +114,6 @@
 
         <?php include("./components/forms/search.php"); ?>
 
-        <?php 
-            if(count($filter) > 0){
-                foreach($filter as $value) {
-                    echo "<script>console.log({filterVal:'$value'})</script>";
-                }
-            }
-        ?>
-
         <section id="chats">
             <ul>
                 <?php include("./components/relationships/contacts.php"); ?>
