@@ -761,6 +761,12 @@ button {
     display: flex;
 }
 
+.chat-bar-msg button {
+    background: none;
+    border: none;
+    outline: none;
+}
+
 .chat-input {
     flex: 1;
     /* height: 100%; */
@@ -804,6 +810,12 @@ button {
     -webkit-mask: url(../assets/icons/paperclip.svg) no-repeat center / contain;
     mask: url(../assets/icons/paperclip.svg) no-repeat center / contain;
     transform: rotate(-30deg);
+}
+
+.send {
+    -webkit-mask: url(../assets/icons/send.svg) no-repeat center / contain;
+    mask: url(../assets/icons/send.svg) no-repeat center / contain;
+    cursor: pointer;
 }
 
 .mic {

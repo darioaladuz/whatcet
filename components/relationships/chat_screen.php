@@ -77,7 +77,7 @@
 
         <form action="../../modules/sendMessage.php" method="POST" class="chat-bar-msg">
             <input type="text" name="message" class="chat-input" placeholder="Type a message">
-            <button type="submit" name="submit">[]</button>
+            <button type="submit" name="submit"><div class="chat-bar-icon send"></div></button>
         </form>
 
         <!-- <div class="chat-bar-mic">

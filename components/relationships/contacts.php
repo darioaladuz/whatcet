@@ -20,6 +20,12 @@
             $contactId = $contact["id"];
             $contactProfileImgId = $contact["profileimg_id"];
             $contactProfileImgPath = getProfileImgPath($conn, $contactProfileImgId);
+
+            $last_message = $contact["last_message"]["text"];
+            $last_message_timestamp = $contact["last_message"]["timestamp"];
+            $last_message_timestamp = date_create($last_message_timestamp);
+            $last_message_timestamp = date_format($last_message_timestamp, "d-m-Y H:i");
+            // var_dump($contact);
             echo "
             <li class=\"chat chat1\" data-id=\"$contactId\">
                 <div class=\"chat1-profile\">
@@ -33,14 +39,14 @@
                         </span>
     
                         <span class=\"chat-time\">
-                            14:59
+                            $last_message_timestamp
                         </span>
                     </div>
     
                     <div class=\"chat-last-msg\">
-                        <div class=\"chat-check check\"></div>
+                        
                         <span class=\"chat-last-msger-text\">
-                            Lorem ipsum blabla
+                            $last_message
                         </span>
                     </div>
                 </div>
@@ -48,3 +54,5 @@
         }
     }
 ?>
+
+<!-- <div class=\"chat-check check\"></div> -->
