@@ -25,6 +25,8 @@
             $last_message_timestamp = $contact["last_message"]["timestamp"];
             $last_message_timestamp = date_create($last_message_timestamp);
             $last_message_timestamp = date_format($last_message_timestamp, "d-m-Y H:i");
+
+            $sent_or_received = $contact["last_message"]["user_sender_id"] === $_SESSION["user"]["id"] ? "Sent: " : "Received: ";
             // var_dump($contact);
             echo "
             <li class=\"chat chat1\" data-id=\"$contactId\">
@@ -46,7 +48,7 @@
                     <div class=\"chat-last-msg\">
                         
                         <span class=\"chat-last-msger-text\">
-                            $last_message
+                            $sent_or_received $last_message
                         </span>
                     </div>
                 </div>

@@ -913,4 +913,35 @@ footer {
     }
 }
 
+#emojis {
+    position: absolute;
+    bottom: 0;
+    width: 300px;
+    transform: translate(0, -50px);
+    padding: 12px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    border: 1px solid var(--light-grey);
+    background-color: var(--dark-grey);
+    border-radius: 12px;
+    display: none;
+}
+
+#emojis.active {
+    display: flex;
+}
+
+#emojis button {
+    position: absolute;
+    right: 0;
+    top: 0;
+    transform: translateY(-110%);
+    background-color: rgba(180, 0, 0, .75);
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    cursor:pointer;
+}
+
 /* CHAT INPUT TO BOTTOM, HEADER MAKE SAME SIZE */

@@ -56,14 +56,19 @@
 
     <section class="chat-bar">
         <div class="chat-bar-btns">
+            <?php include("./components/emojis.php"); ?>
             <!-- <span class="chat-bar-emojis-btn chat-btn"><img src="./assets/icons/emoticon.svg" alt=""></span> -->
-            <div class="chat-bar-icon emoji"></div>
+            <div class="chat-bar-icon emoji">
+                
+            </div>
+            
             <!-- <span class="chat-bar-sharer-btn chat-btn"><img src="./assets/icons/paperclip.svg" alt=""></span> -->
-            <form action="/">
+            <form action="./modules/share_file.php" method="POST" enctype="multipart/form-data">
                 <label for="file">
                     <div class="chat-bar-icon clip"></div>
                 </label>
-                <input style="display: none" id="file" type="file">
+                <input name="image" style="display: none" id="file" type="file">
+                <!-- <input type="submit" name="submit"> -->
             </form>
 
             <div class="dropdown sharer-dropdown">

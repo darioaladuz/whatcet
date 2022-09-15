@@ -445,6 +445,8 @@ contactChats.forEach(contactChat => {
         })
         
         toggleChat();
+
+        // const chatBar = document.querySelector(".chat-input");
         
         // }
         // // enter chat
@@ -455,6 +457,7 @@ contactChats.forEach(contactChat => {
 
         const messages = document.querySelector('.messages');
         messages.scrollTo(0, messages.scrollHeight);
+        
 
         // fix small bug:
         // remove sidebar class that makes it disappear
@@ -485,6 +488,7 @@ messageForm.addEventListener("submit", e => {
         // console.log({ msg });
 
         addMessageToDOM(msg, contactId, true);
+        messageInput.value = "";
     })
 })
 
@@ -507,3 +511,34 @@ messageForm.addEventListener("submit", e => {
 // changeNameBtn.addEventListener
 
 // change status (display input)
+
+// emojis
+
+const emojis = document.getElementById("emojis");
+const chatBar = document.querySelector(".chat-input");
+const emojiBtn = document.querySelector(".chat-bar-icon.emoji");
+const emojiCloseBtn = document.querySelector("#emojis button");
+
+emojiBtn.addEventListener("click", () => {
+    if(emojis.classList.contains("active")){
+        emojis.classList.remove("active");
+    } else {
+        emojis.classList.add("active");
+    }
+})
+
+emojiCloseBtn.addEventListener("click", () => {
+    emojis.classList.remove("active");
+})
+// const input = document.querySelector("input");
+
+for(let i = 128512; i <= 128580; i++) {
+	const emoji = document.createElement("span");
+	emoji.textContent = String.fromCodePoint(i);
+	emojis.appendChild(emoji);
+	
+	emoji.addEventListener("click", () => {
+		chatBar.value += String.fromCodePoint(i);
+	})
+}
+

@@ -23,7 +23,7 @@
         while($row = $result->fetch_assoc()) {
             $conversation_id = $row["conversation_id"];
 
-            $sql2 = "SELECT text, timestamp FROM `messages` WHERE `conversation_id` = $conversation_id ORDER BY timestamp DESC LIMIT 1";
+            $sql2 = "SELECT text, timestamp, user_sender_id FROM `messages` WHERE `conversation_id` = $conversation_id ORDER BY timestamp DESC LIMIT 1";
             
             $result2 = $conn->query($sql2);
 
@@ -55,4 +55,14 @@
     // WHERE u.id = 749500
     // ORDER BY m.timestamp DESC
     // LIMIT 1
+
+//     SELECT u.id, u.fullname, u.profileimg_id, r.conversation_id, m.text, m.timestamp
+// FROM `users` u 
+// INNER JOIN relationships r 
+// INNER JOIN (SELECT m.*
+//             FROM messages m 
+//             ORDER BY m.timestamp DESC) m
+//             	on r.conversation_id = m.conversation_id
+// WHERE (r.user1_id = 749500 AND u.id = r.user2_id)
+// GROUP BY r.conversation_id;
 ?>

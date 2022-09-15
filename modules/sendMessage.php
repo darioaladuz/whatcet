@@ -40,6 +40,11 @@
 
         $text = $_POST["message"];
 
+        if($text === "") {
+            // echo "<script>alert('You can\'t send an empty message!')</script>";
+            return false;
+        }
+
         $result = $conn->query($sql);
         
         if ($result->num_rows > 0) {
